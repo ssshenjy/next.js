@@ -16,10 +16,10 @@ import fs from 'fs'
 
 let projectPath: string = ''
 
-const handleSigTerm = () => process.exit(0)
+const handleExit = () => process.exit(0)
 
-process.on('SIGINT', handleSigTerm)
-process.on('SIGTERM', handleSigTerm)
+process.on('SIGINT', handleExit)
+process.on('SIGTERM', handleExit)
 
 const onPromptState = (state: any) => {
   if (state.aborted) {
