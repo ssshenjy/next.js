@@ -106,7 +106,20 @@ export function resetEnv() {
   }
 }
 
-export function loadEnvConfig(
+function getMode(isTest: boolean, dev?: boolean): string {
+  return isTest ? 'test' : dev ? 'development' : 'production'
+}
+
+function getDotenvFiles(mode: string): string[] {
+  return [
+    `.env.${mode}.local`,
+    mode !== 'test' && `.env.local`,
+    `.env.${mode}`,
+    '.env',
+  ].filter(Boolean) as string[]
+}
+
+export function loadEnvFiles(
   dir: string,
   dev?: boolean,
   log: Log = console,
@@ -128,17 +141,9 @@ export function loadEnvConfig(
   cachedLoadedEnvFiles = []
 
   const isTest = process.env.NODE_ENV === 'test'
-  const mode = isTest ? 'test' : dev ? 'development' : 'production'
-  const dotenvFiles = [
-    `.env.${mode}.local`,
-    // Don't include `.env.local` for `test` environment
-    // since normally you expect tests to produce the same
-    // results for everyone
-    mode !== 'test' && `.env.local`,
-    `.env.${mode}`,
-    '.env',
-  ].filter(Boolean) as string[]
-
+  const mode = getMode(isTest, dev)
+  const dotenvFiles = getDotenvFiles(mode)
+  
   for (const envFile of dotenvFiles) {
     // only load .env if the user provided has an env config file
     const dotEnvPath = path.join(dir, envFile)
