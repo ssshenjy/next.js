@@ -16,10 +16,10 @@ import fs from 'fs'
 
 let projectPath: string = ''
 
-const handleExit = () => process.exit(0)
+const handleApplicationTermination = () => process.exit(0)
 
-process.on('SIGINT', handleExit)
-process.on('SIGTERM', handleExit)
+process.on('SIGINT', handleApplicationTermination)
+process.on('SIGTERM', handleApplicationTermination)
 
 const onPromptState = (state: any) => {
   if (state.aborted) {
@@ -154,7 +154,7 @@ const packageManager = !!program.useNpm
   ? 'bun'
   : getPkgManager()
 
-async function startGeneration(): Promise<void> {
+async function initializeNextAppGeneration(): Promise<void> {
   const conf = new Conf({ projectName: 'create-next-app' })
 
   if (program.resetPreferences) {
@@ -490,7 +490,7 @@ async function notifyUpdate(): Promise<void> {
   }
 }
 
-startGeneration()
+initializeNextAppGeneration()
   .then(notifyUpdate)
   .catch(async (reason) => {
     console.log()
