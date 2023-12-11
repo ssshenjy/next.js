@@ -154,7 +154,7 @@ const packageManager = !!program.useNpm
   ? 'bun'
   : getPkgManager()
 
-async function run(): Promise<void> {
+async function startGeneration(): Promise<void> {
   const conf = new Conf({ projectName: 'create-next-app' })
 
   if (program.resetPreferences) {
@@ -490,7 +490,7 @@ async function notifyUpdate(): Promise<void> {
   }
 }
 
-run()
+startGeneration()
   .then(notifyUpdate)
   .catch(async (reason) => {
     console.log()
